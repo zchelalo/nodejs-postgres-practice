@@ -1,8 +1,8 @@
 import express from 'express'
 
-import { CustomerService } from './../services/customer.service.js'
-import { validatorHandler } from './../middlewares/validator.handler.js'
-import { updateCustomerSchema, createCustomerSchema, getCustomerSchema } from './../schemas/customer.schema.js'
+import { CustomerService } from '../services/customer.service.js'
+import { validatorHandler } from '../middlewares/validator.handler.js'
+import { updateCustomerSchema, createCustomerSchema, getCustomerSchema } from '../schemas/customer.schema.js'
 
 const router = express.Router()
 const service = new CustomerService()

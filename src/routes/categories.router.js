@@ -1,8 +1,8 @@
 import express from 'express'
 
-import { CategoryService } from './../services/category.service.js'
-import { validatorHandler } from './../middlewares/validator.handler.js'
-import { createCategorySchema, updateCategorySchema, getCategorySchema } from './../schemas/category.schema.js'
+import { CategoryService } from '../services/category.service.js'
+import { validatorHandler } from '../middlewares/validator.handler.js'
+import { createCategorySchema, updateCategorySchema, getCategorySchema } from '../schemas/category.schema.js'
 
 const router = express.Router()
 const service = new CategoryService()

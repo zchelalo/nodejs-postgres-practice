@@ -1,8 +1,8 @@
 import express from 'express'
 import cors from 'cors'
-import { config } from "./config/config.js"
-import { routerApi } from './routes/index.js'
-import { logErrors, errorHandler, boomErrorHandler, ormErrorHandler } from './middlewares/error.handler.js'
+import { config } from "./src/config/config.js"
+import { routerApi } from './src/routes/index.js'
+import { logErrors, errorHandler, boomErrorHandler, ormErrorHandler } from './src/middlewares/error.handler.js'
 
 const app = express()
 const port = config.PORT
