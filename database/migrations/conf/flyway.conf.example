@@ -1,0 +1,4 @@
+flyway.url=jdbc:postgresql://np_postgres:5432/mi_tienda
+flyway.user=postgres
+flyway.password=example
+flyway.baselineOnMigrate=false
