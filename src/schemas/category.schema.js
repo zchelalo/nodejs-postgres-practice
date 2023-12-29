@@ -10,8 +10,8 @@ const createCategorySchema = Joi.object({
 })
 
 const updateCategorySchema = Joi.object({
-  name: name,
-  image: image
+  name,
+  image
 })
 
 const getCategorySchema = Joi.object({

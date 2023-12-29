@@ -1,33 +1,42 @@
 import boom from '@hapi/boom'
-import { pool } from '../libs/postgres.js'
+import { sequelize } from '../libs/sequelize.js'
+
+const CategoryModel = sequelize.models.Category
 
 class CategoryService {
 
-  constructor(){
-    this.pool = pool
-    this.pool.on('error', err => console.error(err))
-  }
+  constructor(){}
   
   async create(data) {
-    return data
+    const newCategory = await CategoryModel.create(data)
+    return newCategory
   }
 
   async find() {
-    return []
+    // const categories = await CategoryModel.findAll({
+    //   include: ['products']
+    // })
+    const categories = await CategoryModel.findAll()
+    return categories
   }
 
   async findOne(id) {
-    return { id }
+    const category = await CategoryModel.findByPk(id, { include: ['products'] })
+    if (!category){
+      throw boom.notFound('Categoría no encontrado')
+    }
+    return category
   }
 
   async update(id, changes) {
-    return {
-      id,
-      changes,
-    }
+    const category = await this.findOne(id)
+    const response = await category.update(changes)
+    return response
   }
 
   async delete(id) {
+    const category = await this.findOne(id)
+    await category.destroy()
     return { id }
   }
 

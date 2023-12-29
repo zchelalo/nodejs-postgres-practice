@@ -7,19 +7,23 @@ class CustomerService {
   constructor(){}
 
   async create(data) {
-    const newCustomer = await CustomerModel.create(data)
+    const newCustomer = await CustomerModel.create(data, {
+      include: ['user']
+    })
     return newCustomer
   }
 
   async find() {
-    const response = await CustomerModel.findAll()
+    const response = await CustomerModel.findAll({
+      include: ['user']
+    })
     return response
   }
 
   async findOne(id) {
-    const customer = await CustomerModel.findByPk(id)
+    const customer = await CustomerModel.findByPk(id, { include: ['user'] })
     if (!customer){
-      throw boom.notFound('Usuario no encontrado')
+      throw boom.notFound('Customer no encontrado')
     }
     return customer
   }
