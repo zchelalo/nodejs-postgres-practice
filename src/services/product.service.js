@@ -12,10 +12,18 @@ class ProductsService {
     return newProduct
   }
 
-  async find() {
-    const products = await ProductModel.findAll({
+  async find(query) {
+    const options = {
       include: ['category']
-    })
+    }
+
+    const { limit, offset } = query
+    if (limit && offset){
+      options.limit = limit
+      options.offset = offset
+    }
+
+    const products = await ProductModel.findAll(options)
     return products
   }
 

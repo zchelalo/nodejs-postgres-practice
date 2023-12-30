@@ -2,6 +2,7 @@ import boom from '@hapi/boom'
 import { sequelize } from '../libs/sequelize.js'
 
 const OrderModel = sequelize.models.Order
+const OrderProductModel = sequelize.models.OrderProduct
 
 class OrderService {
 
@@ -12,8 +13,15 @@ class OrderService {
     return newOrder
   }
 
+  async addItem(data) {
+    const newOrderProduct = await OrderProductModel.create(data)
+    return newOrderProduct
+  }
+
   async find() {
-    const response = await OrderModel.findAll({ include: ['customer'] })
+    const response = await OrderModel.findAll({ 
+      include: ['customer']
+    })
     return response
   }
 
@@ -23,7 +31,8 @@ class OrderService {
         {
           association: 'customer',
           include: ['user']
-        }
+        },
+        'items'
       ]
     })
     if (!order){

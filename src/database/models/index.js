@@ -3,6 +3,7 @@ import { Customer, CustomerSchema } from './customer.model.js'
 import { Category, CategorySchema } from './category.model.js'
 import { Product, ProductSchema } from './product.model.js'
 import { Order, OrderSchema } from './order.model.js'
+import { OrderProduct, OrderProductSchema } from './order_product.model.js'
 
 function setupModels(sequelize){
   User.init(UserSchema, User.config(sequelize))
@@ -10,6 +11,7 @@ function setupModels(sequelize){
   Category.init(CategorySchema, Category.config(sequelize))
   Product.init(ProductSchema, Product.config(sequelize))
   Order.init(OrderSchema, Order.config(sequelize))
+  OrderProduct.init(OrderProductSchema, OrderProduct.config(sequelize))
 
   User.associate(sequelize.models)
   Customer.associate(sequelize.models)
