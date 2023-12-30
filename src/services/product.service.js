@@ -1,4 +1,5 @@
 import boom from '@hapi/boom'
+import { Op } from 'sequelize'
 import { sequelize } from '../libs/sequelize.js'
 
 const ProductModel = sequelize.models.Product
@@ -13,14 +14,25 @@ class ProductsService {
   }
 
   async find(query) {
+    const { limit, offset, price, price_min, price_max } = query
+
     const options = {
-      include: ['category']
+      include: ['category'],
+      where: {}
     }
 
-    const { limit, offset } = query
     if (limit && offset){
       options.limit = limit
       options.offset = offset
+    }
+
+    if (price){
+      options.where.price = price
+    }
+    else if (price_min && price_max){
+      options.where.price = {
+        [Op.between]: [price_min, price_max]
+      }
     }
 
     const products = await ProductModel.findAll(options)
