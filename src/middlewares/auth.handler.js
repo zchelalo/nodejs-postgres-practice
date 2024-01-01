@@ -1,8 +1,8 @@
 import boom from '@hapi/boom'
 
-function checkToken(req, res, next){
-  const token = req.headers['token']
-  if (token === '123'){
+function checkAdminRole(req, res, next){
+  const user = req.user
+  if (user.role === 'admin'){
     next()
   }
   else{
@@ -10,4 +10,16 @@ function checkToken(req, res, next){
   }
 }
 
-export { checkToken }
+function checkRoles(...roles){
+  return (req, res, next) => {
+    const user = req.user
+    if (roles.includes(user.role)){
+      next()
+    }
+    else{
+      next(boom.unauthorized())
+    }
+  }
+}
+
+export { checkAdminRole, checkRoles }
