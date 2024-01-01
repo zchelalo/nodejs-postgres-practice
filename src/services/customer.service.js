@@ -2,6 +2,7 @@ import boom from '@hapi/boom'
 import { sequelize } from '../libs/sequelize.js'
 
 const CustomerModel = sequelize.models.Customer
+const UserModel = sequelize.models.User
 
 class CustomerService {
   constructor(){}
@@ -10,18 +11,34 @@ class CustomerService {
     const newCustomer = await CustomerModel.create(data, {
       include: ['user']
     })
+    delete newCustomer.user.dataValues.password
+
     return newCustomer
   }
 
   async find() {
     const response = await CustomerModel.findAll({
-      include: ['user']
+      include: [{
+        model: UserModel,
+        as: 'user',
+        attributes: { exclude: ['password'] }
+      }]
     })
     return response
   }
 
   async findOne(id) {
-    const customer = await CustomerModel.findByPk(id, { include: ['user', 'orders'] })
+    const customer = await CustomerModel.findByPk(id, { 
+      include: [
+        {
+          model: UserModel,
+          as: 'user',
+          attributes: { exclude: ['password'] }
+        }, 
+        'orders'
+      ] 
+    })
+
     if (!customer){
       throw boom.notFound('Customer no encontrado')
     }

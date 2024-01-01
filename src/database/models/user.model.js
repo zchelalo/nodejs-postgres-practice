@@ -1,4 +1,5 @@
 import { Model, DataTypes, Sequelize } from 'sequelize'
+import bcrypt from 'bcrypt'
 
 const USER_TABLE = 'users'
 
@@ -41,7 +42,13 @@ class User extends Model {
       sequelize,
       tableName: USER_TABLE,
       modelName: 'User',
-      timestamps: false
+      timestamps: false,
+      hooks: {
+        beforeCreate: async (user, options) => {
+          const password = await bcrypt.hash(user.password, 10)
+          user.password = password
+        }
+      }
     }
   }
 }

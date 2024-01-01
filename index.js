@@ -1,8 +1,12 @@
 import express from 'express'
 import cors from 'cors'
+
 import { config } from "./src/config/config.js"
 import { routerApi } from './src/routes/index.js'
 import { logErrors, errorHandler, boomErrorHandler, ormErrorHandler } from './src/middlewares/error.handler.js'
+
+import passport from 'passport'
+import './src/utils/auth/index.js'
 
 const app = express()
 const port = config.PORT
@@ -22,6 +26,8 @@ const options = {
   // origin: '*'
 }
 app.use(cors(options))
+
+app.use(passport.initialize())
 
 routerApi(app)
 

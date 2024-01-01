@@ -1,19 +1,22 @@
 import express from 'express'
+import passport from 'passport'
 
 import { router as productsRouter } from './products.router.js'
 import { router as categoriesRouter } from './categories.router.js'
 import { router as usersRouter } from './users.router.js'
 import { router as orderRouter } from './orders.router.js'
 import { router as customerRouter } from './customer.router.js'
+import { router as authRouter } from './auth.router.js'
 
 function routerApi(app) {
   const router = express.Router()
   app.use('/api/v1', router)
   router.use('/products', productsRouter)
   router.use('/categories', categoriesRouter)
-  router.use('/users', usersRouter)
-  router.use('/orders', orderRouter)
-  router.use('/customers', customerRouter)
+  router.use('/users', passport.authenticate('jwt', { session: false }), usersRouter)
+  router.use('/orders', passport.authenticate('jwt', { session: false }), orderRouter)
+  router.use('/customers', passport.authenticate('jwt', { session: false }), customerRouter)
+  router.use('/auth', authRouter)
 }
 
 export { routerApi }

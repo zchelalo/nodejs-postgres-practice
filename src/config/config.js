@@ -9,7 +9,8 @@ const config = {
   PG_PORT: process.env.PG_PORT || 5432,
   PG_USER: process.env.PG_USER || 'postgres',
   PG_PASS: process.env.PG_PASS || '',
-  PG_DB: process.env.PG_DB || 'mi_tienda'
+  PG_DB: process.env.PG_DB || 'mi_tienda',
+  JWT_SECRET: process.env.JWT_SECRET || 'mysecret'
 }
 
 export { config }
