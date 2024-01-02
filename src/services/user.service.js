@@ -18,12 +18,22 @@ class UserService {
     const response = await UserModel.findAll({
       include: ['customer'],
       // attributes: ['id', 'email', 'role', 'createdAt']
-      attributes: { exclude: ['password'] }
+      attributes: { exclude: ['password', 'recoveryToken'] }
     })
     return response
   }
 
   async findOne(id) {
+    const user = await UserModel.findByPk(id, {
+      attributes: { exclude: ['password', 'recoveryToken'] }
+    })
+    if (!user){
+      throw boom.notFound('Usuario no encontrado')
+    }
+    return user
+  }
+
+  async findOneWithRecovery(id) {
     const user = await UserModel.findByPk(id, {
       attributes: { exclude: ['password'] }
     })

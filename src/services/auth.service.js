@@ -37,13 +37,45 @@ class AuthService {
     return token
   }
 
-  async sendMail(email){
+  async sendRecovery(email){
     const user = await service.findByEmail(email)
 
     if (!user){
       throw boom.unauthorized()
     }
 
+    const payload = { sub: user.id }
+    const token = jwt.sign(payload, config.JWT_RECOVERY_SECRET, { expiresIn: '10m' })
+    const link = `http://myfrontend.com/recovery?${token}`
+
+    const userUpdated = await service.update(user.id, { recoveryToken: token })
+
+    let info = {
+      from: `"Aplicación" <${config.EMAIL_USER}>`, // sender address
+      to: `${user.email}`, // list of receivers
+      subject: "Correo de recuperación de contraseña", // Subject line
+      html: `<b>Recupere su contraseña ingresando al siguiente link</b><br /><a href="${link}">Recovery</a>`, // html body
+    }
+
+    const respuesta = await this.sendMail(info)
+    return respuesta
+  }
+
+  async changePassword(token, newPassword){
+    try {
+      const payload = jwt.verify(token, config.JWT_RECOVERY_SECRET)
+      const user = await service.findOneWithRecovery(payload.sub)
+      if (user.recoveryToken !== token){
+        throw boom.unauthorized()
+      }
+      const userUpdated = await service.update(user.id, { recoveryToken: null, password: newPassword })
+      return { message: 'Contraseña actualizada correctamente' }
+    } catch (error) {
+      throw boom.unauthorized()
+    }
+  }
+
+  async sendMail(infoMail){
     const transporter = nodemailer.createTransport({
       host: config.EMAIL_SERVER,
       port: config.EMAIL_PORT,
@@ -54,13 +86,7 @@ class AuthService {
       }
     })
 
-    let info = await transporter.sendMail({
-      from: '"Aplicación" <eduardosaavedra687@gmail.com>', // sender address
-      to: `${user.email}`, // list of receivers
-      subject: "Correo de recuperación de contraseña", // Subject line
-      text: "Recupere su contraseña dandole al siguiente link", // plain text body
-      html: "<b>Recupere su contraseña dandole al siguiente link</b>", // html body
-    })
+    let info = await transporter.sendMail(infoMail)
 
     // console.log("Message sent: %s", info.messageId)
     return { msg: 'Correo enviado' }

@@ -19,6 +19,11 @@ const UserSchema = {
     allowNull: false,
     type: DataTypes.STRING
   },
+  recoveryToken: {
+    allowNull: true,
+    type: DataTypes.STRING,
+    field: 'recovery_token'
+  },
   role: {
     allowNull: false,
     type: DataTypes.STRING,
@@ -47,6 +52,13 @@ class User extends Model {
         beforeCreate: async (user, options) => {
           const password = await bcrypt.hash(user.password, 10)
           user.password = password
+        },
+        beforeUpdate: async (user, options) => {
+          // Verifica si la contraseña ha sido modificada antes de hacer el hash nuevamente
+          if (user.changed('password')) {
+            const password = await bcrypt.hash(user.password, 10)
+            user.password = password
+          }
         }
       }
     }
