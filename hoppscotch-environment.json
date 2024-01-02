@@ -1,0 +1,17 @@
+{
+  "variables": [
+    {
+      "key": "http",
+      "value": "http"
+    },
+    {
+      "key": "host",
+      "value": "localhost:3000"
+    },
+    {
+      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIyLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MDQxNjc0NTEsImV4cCI6MTcwNDE3NDY1MX0.7FhaX7RXj_3YGRM6JFRHfUIrndg8q9jVuJr30YmvoDg",
+      "key": "token"
+    }
+  ],
+  "name": "nodejs_postgres"
+}
