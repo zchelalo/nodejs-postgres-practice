@@ -18,9 +18,26 @@ class OrderService {
     return newOrderProduct
   }
 
+  async findByUser(userId) {
+    const orders = await OrderModel.findAll({
+      where: {
+        '$customer.user.id$': userId
+      },
+      include: [
+        {
+          association: 'customer',
+          include: ['user']
+        }
+      ],
+      attributes: { exclude: ['total'] }
+    })
+    return orders
+  }
+
   async find() {
     const response = await OrderModel.findAll({ 
-      include: ['customer']
+      include: ['customer'],
+      attributes: { exclude: ['total'] }
     })
     return response
   }

@@ -1,6 +1,8 @@
 import express from 'express'
 import passport from 'passport'
 
+import { checkRoles } from '../middlewares/auth.handler.js'
+
 import { ProductsService } from '../services/product.service.js'
 import { validatorHandler } from '../middlewares/validator.handler.js'
 import { createProductSchema, updateProductSchema, getProductSchema, queryProductSchema } from '../schemas/product.schema.js'
